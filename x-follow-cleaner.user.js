@@ -2,12 +2,12 @@
 // @name         X Follow Cleaner Local
 // @namespace    local.x.follow.cleaner
 // @version      0.4.0
-// @description  Local-first X cleaner with non-mutual unfollow and optional follow-back batches.
+// @description  本地优先的 X 互关清理、白名单、批量取关和批量回关工具。
 // @author       baor87492-star
 // @match        https://x.com/*
 // @match        https://twitter.com/*
-// @downloadURL  https://raw.githubusercontent.com/baor87492-star/x-follow-cleaner/main/x-follow-cleaner.user.js
-// @updateURL    https://raw.githubusercontent.com/baor87492-star/x-follow-cleaner/main/x-follow-cleaner.user.js
+// @downloadURL  https://cdn.jsdelivr.net/gh/baor87492-star/x-follow-cleaner@main/x-follow-cleaner.user.js
+// @updateURL    https://cdn.jsdelivr.net/gh/baor87492-star/x-follow-cleaner@main/x-follow-cleaner.user.js
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
@@ -245,27 +245,27 @@
     const nonMutualRows = nonMutual.slice(0, 80).map((account) => `
       <div class="xfc-row" data-handle="${account.handle}">
         <div class="xfc-name">${escapeHtml(account.name || '-')}<br><a href="https://x.com/${account.handle}" target="_blank">@${account.handle}</a></div>
-        <button class="keep" data-act="keep">Keep</button>
-        <button class="pick ${selected.has(account.handle) ? 'active' : ''}" data-act="pick">${selected.has(account.handle) ? 'Picked' : 'Unfollow'}</button>
+        <button class="keep" data-act="keep">保留</button>
+        <button class="pick ${selected.has(account.handle) ? 'active' : ''}" data-act="pick">${selected.has(account.handle) ? '已选' : '取关'}</button>
       </div>`).join('');
     const followRows = followCandidates.slice(0, 80).map((account) => `
       <div class="xfc-row" data-handle="${account.handle}">
         <div class="xfc-name">${escapeHtml(account.name || '-')}<br><a href="https://x.com/${account.handle}" target="_blank">@${account.handle}</a></div>
-        <button class="keep" data-act="skip-followback">Skip</button>
-        <button class="pick ${followSelected.has(account.handle) ? 'active' : ''}" data-act="pick-followback">${followSelected.has(account.handle) ? 'Picked' : 'Follow back'}</button>
+        <button class="keep" data-act="skip-followback">跳过</button>
+        <button class="pick ${followSelected.has(account.handle) ? 'active' : ''}" data-act="pick-followback">${followSelected.has(account.handle) ? '已选' : '回关'}</button>
       </div>`).join('');
     const routePrompt = !onFollowingPage && !onFollowersPage && !onVerifiedFollowersPage;
 
     panel.innerHTML = `
-      <div class="xfc-head"><span class="xfc-title">X Follow Cleaner</span><button data-act="minimize">Hide</button></div>
+      <div class="xfc-head"><span class="xfc-title">X 互关清理助手</span><button data-act="minimize">收起</button></div>
       <div class="xfc-body">
-        ${routePrompt ? `<div class="xfc-route"><div class="xfc-log">Enter a handle, then choose a page.</div><div class="xfc-open-row"><input id="xfc-handle-input" placeholder="@your_handle" value="${escapeHtml(inferredHandle ? `@${inferredHandle}` : '')}"><button data-act="open-following">Following</button><button data-act="open-verified-followers">Verified followers</button><button data-act="open-followers">All followers</button></div></div>` : ''}
-        <div class="xfc-stats"><div class="xfc-stat"><strong>${all.length}</strong>Following scanned</div><div class="xfc-stat"><strong>${nonMutual.length}</strong>Non-mutual</div><div class="xfc-stat"><strong>${followCandidates.length}</strong>Can follow back</div></div>
-        <div class="xfc-controls"><label>Batch size<input id="xfc-batch" type="number" min="1" max="100" value="${state.batchSize}"></label><label>Delay ms<input id="xfc-delay" type="number" min="2000" max="60000" step="500" value="${state.delayMs}"></label></div>
-        <div class="xfc-actions"><button data-act="scan" ${onFollowingPage ? '' : 'disabled'}>Scan following</button><button class="secondary" data-act="select-all">Pick all non-mutual</button><button class="secondary" data-act="export-keep">Export whitelist</button><button class="secondary" data-act="import-keep">Import whitelist</button><button class="secondary" data-act="export-nonmutual">Export non-mutual</button><button class="danger" data-act="unfollow" ${onFollowingPage ? '' : 'disabled'}>Start unfollow</button></div>
-        <div class="xfc-actions"><button data-act="scan-followback-verified" ${onVerifiedFollowersPage ? '' : 'disabled'}>Scan verified followers</button><button data-act="scan-followback-all" ${onFollowersPage ? '' : 'disabled'}>Scan all followers</button><button class="secondary" data-act="open-verified-followers">Open verified</button><button class="secondary" data-act="open-followers">Open all</button><button class="secondary" data-act="select-all-followback">Pick all follow-back</button><button data-act="follow-back" ${(onFollowersPage || onVerifiedFollowersPage) ? '' : 'disabled'}>Start follow back</button><button class="danger" data-act="stop">Stop</button></div>
-        <div class="xfc-list">${followMode ? (followRows || '<div class="xfc-row"><div class="xfc-name">No follow-back candidates scanned yet.</div></div>') : (nonMutualRows || '<div class="xfc-row"><div class="xfc-name">No non-mutual accounts scanned yet.</div></div>')}</div>
-        <div class="xfc-log" id="xfc-log">${onFollowingPage || onFollowersPage || onVerifiedFollowersPage ? 'All data stays in this browser.' : 'Open a target page to enable scanning.'}</div>
+        ${routePrompt ? `<div class="xfc-route"><div class="xfc-log">输入账号，然后选择要打开的页面。</div><div class="xfc-open-row"><input id="xfc-handle-input" placeholder="@你的用户名" value="${escapeHtml(inferredHandle ? `@${inferredHandle}` : '')}"><button data-act="open-following">正在关注</button><button data-act="open-verified-followers">认证关注者</button><button data-act="open-followers">所有关注者</button></div></div>` : ''}
+        <div class="xfc-stats"><div class="xfc-stat"><strong>${all.length}</strong>已扫关注</div><div class="xfc-stat"><strong>${nonMutual.length}</strong>未互关</div><div class="xfc-stat"><strong>${followCandidates.length}</strong>可回关</div></div>
+        <div class="xfc-controls"><label>本次数量<input id="xfc-batch" type="number" min="1" max="100" value="${state.batchSize}"></label><label>间隔毫秒<input id="xfc-delay" type="number" min="2000" max="60000" step="500" value="${state.delayMs}"></label></div>
+        <div class="xfc-actions"><button data-act="scan" ${onFollowingPage ? '' : 'disabled'}>扫描正在关注</button><button class="secondary" data-act="select-all">全选未互关</button><button class="secondary" data-act="export-keep">导出白名单</button><button class="secondary" data-act="import-keep">导入白名单</button><button class="secondary" data-act="export-nonmutual">导出未互关</button><button class="danger" data-act="unfollow" ${onFollowingPage ? '' : 'disabled'}>开始取关</button></div>
+        <div class="xfc-actions"><button data-act="scan-followback-verified" ${onVerifiedFollowersPage ? '' : 'disabled'}>扫描认证关注者</button><button data-act="scan-followback-all" ${onFollowersPage ? '' : 'disabled'}>扫描所有关注者</button><button class="secondary" data-act="open-verified-followers">打开认证关注者</button><button class="secondary" data-act="open-followers">打开所有关注者</button><button class="secondary" data-act="select-all-followback">全选可回关</button><button data-act="follow-back" ${(onFollowersPage || onVerifiedFollowersPage) ? '' : 'disabled'}>开始回关</button><button class="danger" data-act="stop">停止</button></div>
+        <div class="xfc-list">${followMode ? (followRows || '<div class="xfc-row"><div class="xfc-name">还没有扫描到可回关账号。</div></div>') : (nonMutualRows || '<div class="xfc-row"><div class="xfc-name">还没有扫描到未互关账号。</div></div>')}</div>
+        <div class="xfc-log" id="xfc-log">${onFollowingPage || onFollowersPage || onVerifiedFollowersPage ? '所有数据只保存在当前浏览器。' : '打开目标页面后才能扫描。'}</div>
       </div>`;
     bindPanel(panel);
   }
@@ -289,7 +289,7 @@
     if (action === 'scan') return scanFollowing();
     if (action === 'scan-followback-all') return scanFollowBack('all');
     if (action === 'scan-followback-verified') return scanFollowBack('verified');
-    if (action === 'stop') { scanning = false; unfollowing = false; followingBack = false; return log('Stop requested.'); }
+    if (action === 'stop') { scanning = false; unfollowing = false; followingBack = false; return log('已请求停止。'); }
     if (action === 'keep') return keepHandle(handle);
     if (action === 'pick') return togglePick(handle);
     if (action === 'skip-followback') return skipFollowBack(handle);
@@ -306,28 +306,28 @@
   function openFollowingPage() {
     const input = document.querySelector('#xfc-handle-input')?.value || inferHandleFromPage();
     const url = getFollowingUrl(input);
-    if (!url) return log('Enter a handle, for example @Ryan61257127.');
+    if (!url) return log('请输入账号，例如 @Ryan61257127。');
     location.href = url;
   }
 
   function openFollowersPage() {
     const input = document.querySelector('#xfc-handle-input')?.value || inferHandleFromPage();
     const url = getFollowersUrl(input);
-    if (!url) return log('Enter a handle, for example @Ryan61257127.');
+    if (!url) return log('请输入账号，例如 @Ryan61257127。');
     location.href = url;
   }
 
   function openVerifiedFollowersPage() {
     const input = document.querySelector('#xfc-handle-input')?.value || inferHandleFromPage();
     const url = getVerifiedFollowersUrl(input);
-    if (!url) return log('Enter a handle, for example @Ryan61257127.');
+    if (!url) return log('请输入账号，例如 @Ryan61257127。');
     location.href = url;
   }
 
   async function scanFollowing() {
     if (scanning) return;
     scanning = true;
-    log('Scanning and scrolling...');
+    log('正在扫描并自动下滑...');
     let staleRounds = 0;
     let previousSize = scanMap.size;
     for (let round = 0; round < 240 && scanning; round += 1) {
@@ -335,7 +335,7 @@
       staleRounds = scanMap.size === previousSize ? staleRounds + 1 : 0;
       previousSize = scanMap.size;
       render();
-      log(`Scanning: ${scanMap.size} accounts, ${getNonMutual().length} non-mutual.`);
+      log(`扫描中：已发现 ${scanMap.size} 个关注账号，其中 ${getNonMutual().length} 个未互关。`);
       if (staleRounds >= 12 && round > 15) break;
       window.scrollBy(0, Math.floor(window.innerHeight * 0.9));
       await sleep(900);
@@ -343,14 +343,14 @@
     mergeAccounts(parseVisibleAccounts());
     scanning = false;
     render();
-    log(`Done: ${scanMap.size} accounts, ${getNonMutual().length} non-mutual.`);
+    log(`扫描完成：共 ${scanMap.size} 个关注账号，其中 ${getNonMutual().length} 个未互关。`);
   }
 
   async function scanFollowBack(mode) {
     if (scanning) return;
     scanning = true;
     persistSets({ ...stateSets(), view: mode === 'verified' ? 'followBackVerified' : 'followBackAll' });
-    log(`Scanning ${mode === 'verified' ? 'verified followers' : 'all followers'}...`);
+    log(`正在扫描${mode === 'verified' ? '认证关注者' : '所有关注者'}...`);
     let staleRounds = 0;
     let previousSize = followBackMap.size;
     for (let round = 0; round < 240 && scanning; round += 1) {
@@ -358,7 +358,7 @@
       staleRounds = followBackMap.size === previousSize ? staleRounds + 1 : 0;
       previousSize = followBackMap.size;
       render();
-      log(`Scanning: ${getFollowBackCandidates(mode).length} follow-back candidates.`);
+      log(`扫描中：已发现 ${getFollowBackCandidates(mode).length} 个可回关账号。`);
       if (staleRounds >= 12 && round > 15) break;
       window.scrollBy(0, Math.floor(window.innerHeight * 0.9));
       await sleep(900);
@@ -366,7 +366,7 @@
     mergeFollowBackAccounts(parseVisibleAccounts(), mode);
     scanning = false;
     render();
-    log(`Done: ${getFollowBackCandidates(mode).length} follow-back candidates.`);
+    log(`扫描完成：共 ${getFollowBackCandidates(mode).length} 个可回关账号。`);
   }
 
   function keepHandle(handle) {
@@ -418,14 +418,14 @@
   }
 
   function importKeepPrompt() {
-    const input = prompt('Paste whitelist JSON array or one @handle per line:');
+    const input = prompt('粘贴白名单 JSON，或每行一个 @用户名：');
     if (input == null) return;
     const imported = importKeepList(input);
     const { keep, selected, done } = stateSets();
     imported.forEach((handle) => { keep.add(handle); selected.delete(handle); });
     persistSets({ keep, selected, done });
     render();
-    log(`Imported ${imported.length} whitelist handles.`);
+    log(`已导入 ${imported.length} 个白名单账号。`);
   }
 
   function importKeepList(text) {
@@ -446,7 +446,7 @@
     persistControlValues();
     const { state, selected, done, keep } = stateSets();
     const queue = getNonMutual().filter((account) => selected.has(account.handle)).filter((account) => !done.has(account.handle)).filter((account) => !keep.has(account.handle)).slice(0, Number(state.batchSize || 10));
-    if (!queue.length) return log('No selected accounts. Pick accounts first.');
+    if (!queue.length) return log('没有已选择的取关账号，请先选择账号。');
     unfollowing = true;
     for (const account of queue) {
       if (!unfollowing) break;
@@ -454,12 +454,12 @@
       const latest = stateSets();
       if (ok) { latest.done.add(account.handle); latest.selected.delete(account.handle); persistSets(latest); }
       render();
-      log(`${ok ? 'Processed' : 'Button not found'} @${account.handle}`);
+      log(`${ok ? '已处理' : '没找到取关按钮'} @${account.handle}`);
       await sleep(Number(loadState().delayMs || 4500));
     }
     unfollowing = false;
     render();
-    log('Batch complete.');
+    log('本批取关完成。');
   }
 
   async function startFollowBack() {
@@ -468,7 +468,7 @@
     const mode = isVerifiedFollowersPage() ? 'verified' : isFollowersPage() ? 'all' : loadState().view === 'followBackVerified' ? 'verified' : 'all';
     const { state, followSelected, followDone } = stateSets();
     const queue = getFollowBackCandidates(mode).filter((account) => followSelected.has(account.handle)).filter((account) => !followDone.has(account.handle)).slice(0, Number(state.batchSize || 10));
-    if (!queue.length) return log('No selected follow-back accounts. Pick accounts first.');
+    if (!queue.length) return log('没有已选择的回关账号，请先选择账号。');
     followingBack = true;
     for (const account of queue) {
       if (!followingBack) break;
@@ -480,12 +480,12 @@
         persistSets({ ...latest, view: mode === 'verified' ? 'followBackVerified' : 'followBackAll' });
       }
       render();
-      log(`${ok ? 'Followed back' : 'Follow-back button not found'} @${account.handle}`);
+      log(`${ok ? '已回关' : '没找到回关按钮'} @${account.handle}`);
       await sleep(Number(loadState().delayMs || 4500));
     }
     followingBack = false;
     render();
-    log('Follow-back batch complete.');
+    log('本批回关完成。');
   }
 
   async function unfollowHandle(handle) {
