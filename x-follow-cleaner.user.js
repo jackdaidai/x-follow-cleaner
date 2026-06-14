@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X Follow Cleaner Local
 // @namespace    local.x.follow.cleaner
-// @version      0.4.1
+// @version      0.4.2
 // @description  本地优先的 X 互关清理、白名单、批量取关和批量回关工具。
 // @author       baor87492-star
 // @match        https://x.com/*
@@ -238,7 +238,7 @@
     const onFollowingPage = isFollowingPage();
     const onFollowersPage = isFollowersPage();
     const onVerifiedFollowersPage = isVerifiedFollowersPage();
-    const activeView = onFollowingPage ? '' : onVerifiedFollowersPage ? 'followBackVerified' : onFollowersPage ? 'followBackAll' : state.view;
+    const activeView = state.view;
     const followMode = activeView === 'followBackVerified' ? 'verified' : activeView === 'followBackAll' ? 'all' : '';
     const followCandidates = getFollowBackCandidates(followMode);
     const followSelected = stateSets().followSelected;
@@ -264,8 +264,8 @@
         <div class="xfc-stats"><div class="xfc-stat"><strong>${all.length}</strong>已扫关注</div><div class="xfc-stat"><strong>${nonMutual.length}</strong>未互关</div><div class="xfc-stat"><strong>${followCandidates.length}</strong>可回关</div></div>
         <div class="xfc-controls"><label>本次数量<input id="xfc-batch" type="number" min="1" max="100" value="${state.batchSize}"></label><label>间隔毫秒<input id="xfc-delay" type="number" min="2000" max="60000" step="500" value="${state.delayMs}"></label></div>
         <div class="xfc-actions"><button class="secondary" data-act="view-following">查看未互关</button><button class="secondary" data-act="view-followback-verified">查看认证回关</button><button class="secondary" data-act="view-followback-all">查看全部回关</button></div>
-        <div class="xfc-actions"><button data-act="scan" ${onFollowingPage ? '' : 'disabled'}>扫描正在关注</button><button class="secondary" data-act="select-all">全选未互关</button><button class="secondary" data-act="export-keep">导出白名单</button><button class="secondary" data-act="import-keep">导入白名单</button><button class="secondary" data-act="export-nonmutual">导出未互关</button><button class="danger" data-act="unfollow" ${onFollowingPage ? '' : 'disabled'}>开始取关</button></div>
-        <div class="xfc-actions"><button data-act="scan-followback-verified" ${onVerifiedFollowersPage ? '' : 'disabled'}>扫描认证关注者</button><button data-act="scan-followback-all" ${onFollowersPage ? '' : 'disabled'}>扫描所有关注者</button><button class="secondary" data-act="open-verified-followers">打开认证关注者</button><button class="secondary" data-act="open-followers">打开所有关注者</button><button class="secondary" data-act="select-all-followback">全选可回关</button><button data-act="follow-back" ${(onFollowersPage || onVerifiedFollowersPage) ? '' : 'disabled'}>开始回关</button><button class="danger" data-act="stop">停止</button></div>
+        <div class="xfc-actions"><button class="secondary" data-act="open-following">打开正在关注</button><button data-act="scan" ${onFollowingPage ? '' : 'disabled'}>${onFollowingPage ? '扫描未互关' : '需打开正在关注'}</button><button class="secondary" data-act="select-all">全选未互关</button><button class="secondary" data-act="export-keep">导出白名单</button><button class="secondary" data-act="import-keep">导入白名单</button><button class="secondary" data-act="export-nonmutual">导出未互关</button><button class="danger" data-act="unfollow" ${onFollowingPage ? '' : 'disabled'}>开始取关</button></div>
+        <div class="xfc-actions"><button data-act="scan-followback-verified" ${onVerifiedFollowersPage ? '' : 'disabled'}>${onVerifiedFollowersPage ? '扫描认证关注者' : '需打开认证关注者'}</button><button data-act="scan-followback-all" ${onFollowersPage ? '' : 'disabled'}>${onFollowersPage ? '扫描所有关注者' : '需打开所有关注者'}</button><button class="secondary" data-act="open-verified-followers">打开认证关注者</button><button class="secondary" data-act="open-followers">打开所有关注者</button><button class="secondary" data-act="select-all-followback">全选可回关</button><button data-act="follow-back" ${(onFollowersPage || onVerifiedFollowersPage) ? '' : 'disabled'}>开始回关</button><button class="danger" data-act="stop">停止</button></div>
         <div class="xfc-list">${followMode ? (followRows || '<div class="xfc-row"><div class="xfc-name">还没有扫描到可回关账号。</div></div>') : (nonMutualRows || '<div class="xfc-row"><div class="xfc-name">还没有扫描到未互关账号。</div></div>')}</div>
         <div class="xfc-log" id="xfc-log">${onFollowingPage || onFollowersPage || onVerifiedFollowersPage ? '所有数据只保存在当前浏览器。' : '打开目标页面后才能扫描。'}</div>
       </div>`;
@@ -489,6 +489,7 @@
     followingBack = true;
     for (const account of queue) {
       if (!followingBack) break;
+      log(`正在定位 @${account.handle} 的回关按钮...`);
       const ok = await followBackHandle(account.handle);
       const latest = stateSets();
       if (ok) {
@@ -527,7 +528,7 @@
   }
 
   async function followBackHandle(handle) {
-    const cell = findUserCell(normalizeHandle(handle));
+    const cell = await findUserCellWithScroll(normalizeHandle(handle));
     if (!cell) return false;
     cell.scrollIntoView({ block: 'center' });
     await sleep(600);
@@ -538,6 +539,34 @@
     if (!button) return false;
     button.click();
     return true;
+  }
+
+  async function findUserCellWithScroll(handle) {
+    let cell = findUserCell(handle);
+    if (cell) return cell;
+
+    const startY = Number(window.scrollY || 0);
+    window.scrollTo?.(0, 0);
+    await sleep(1200);
+
+    let staleRounds = 0;
+    let previousY = -1;
+    for (let round = 0; round < 180 && followingBack; round += 1) {
+      cell = findUserCell(handle);
+      if (cell) return cell;
+
+      const currentY = Number(window.scrollY || 0);
+      staleRounds = Math.abs(currentY - previousY) < 8 ? staleRounds + 1 : 0;
+      previousY = currentY;
+      if (staleRounds >= 8 && round > 10) break;
+
+      window.scrollBy(0, Math.floor(window.innerHeight * 0.85));
+      await sleep(750);
+    }
+
+    window.scrollTo?.(0, startY);
+    await sleep(500);
+    return findUserCell(handle);
   }
 
   function findUserCell(handle) {
