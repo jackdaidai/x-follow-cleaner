@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X Follow Cleaner Local
 // @namespace    local.x.follow.cleaner
-// @version      0.4.2
+// @version      0.4.3
 // @description  本地优先的 X 互关清理、白名单、批量取关和批量回关工具。
 // @author       baor87492-star
 // @match        https://x.com/*
@@ -212,14 +212,14 @@
     const style = document.createElement('style');
     style.id = 'xfc-style';
     style.textContent = `
-      #${UI_ID}{position:fixed;right:16px;top:78px;z-index:2147483647;width:380px;max-height:82vh;color:#172033;background:#fff;border:1px solid #d8dee8;border-radius:8px;box-shadow:0 12px 36px rgba(15,23,42,.18);font:13px/1.45 Arial,sans-serif;overflow:hidden}
+      #${UI_ID}{position:fixed;right:16px;top:78px;z-index:2147483647;width:380px;max-height:82vh;color:#172033;background:#fff;border:1px solid #d8dee8;border-radius:8px;box-shadow:0 12px 36px rgba(15,23,42,.18);font:13px/1.45 Arial,sans-serif;overflow:hidden;display:flex;flex-direction:column}
       #${UI_ID}.minimized .xfc-body{display:none} #${UI_ID} *{box-sizing:border-box}
       .xfc-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#172033;color:#fff}.xfc-title{font-weight:700}
       .xfc-head button,.xfc-actions button,.xfc-row button{border:0;border-radius:6px;padding:6px 9px;cursor:pointer;font-weight:700}.xfc-head button{background:#2a3448;color:#fff}
-      .xfc-body{padding:12px;display:grid;gap:10px}.xfc-route{display:grid;gap:8px;padding:8px;border:1px solid #f0d58b;background:#fff8e6;border-radius:6px}.xfc-open-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.xfc-open-row input,.xfc-controls input{min-width:0;border:1px solid #d8dee8;border-radius:6px;padding:7px}.xfc-open-row button{border:0;border-radius:6px;padding:7px 10px;background:#1264d8;color:#fff;font-weight:700;cursor:pointer}
+      .xfc-body{flex:1 1 auto;min-height:0;overflow:hidden auto;padding:12px;display:grid;gap:10px}.xfc-route{display:grid;gap:8px;padding:8px;border:1px solid #f0d58b;background:#fff8e6;border-radius:6px}.xfc-open-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.xfc-open-row input,.xfc-controls input{min-width:0;border:1px solid #d8dee8;border-radius:6px;padding:7px}.xfc-open-row button{border:0;border-radius:6px;padding:7px 10px;background:#1264d8;color:#fff;font-weight:700;cursor:pointer}
       .xfc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.xfc-stat{background:#f5f7fb;border:1px solid #e4e8f0;border-radius:6px;padding:7px}.xfc-stat strong{display:block;font-size:17px}
       .xfc-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}.xfc-controls label{display:grid;gap:4px;font-weight:700}.xfc-actions{display:flex;flex-wrap:wrap;gap:6px}.xfc-actions button{background:#1264d8;color:#fff}.xfc-actions button:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed}.xfc-actions button.secondary{background:#e9eef8;color:#18375f}.xfc-actions button.danger{background:#c9342f;color:#fff}
-      .xfc-list{border:1px solid #e4e8f0;border-radius:6px;max-height:280px;overflow:auto}.xfc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px;border-bottom:1px solid #edf1f7}.xfc-row:last-child{border-bottom:0}.xfc-name{overflow-wrap:anywhere}.xfc-name a{color:#1264d8;text-decoration:none;font-weight:700}.xfc-row button.keep{background:#e9eef8;color:#18375f}.xfc-row button.pick{background:#fff0ef;color:#c9342f;border:1px solid #f2b7b4}.xfc-row button.pick.active{background:#c9342f;color:#fff}.xfc-log{color:#667085;min-height:18px}
+      .xfc-list{border:1px solid #e4e8f0;border-radius:6px;min-height:45vh;max-height:45vh;overflow:auto}.xfc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px;border-bottom:1px solid #edf1f7}.xfc-row:last-child{border-bottom:0}.xfc-name{overflow-wrap:anywhere}.xfc-name a{color:#1264d8;text-decoration:none;font-weight:700}.xfc-row button.keep{background:#e9eef8;color:#18375f}.xfc-row button.pick{background:#fff0ef;color:#c9342f;border:1px solid #f2b7b4}.xfc-row button.pick.active{background:#c9342f;color:#fff}.xfc-log{color:#667085;min-height:18px}
     `;
     document.head.append(style);
   }
