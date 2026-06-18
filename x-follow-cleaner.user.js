@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X Follow Cleaner Local
 // @namespace    local.x.follow.cleaner
-// @version      0.4.3
+// @version      0.4.4
 // @description  本地优先的 X 互关清理、白名单、批量取关和批量回关工具。
 // @author       baor87492-star
 // @match        https://x.com/*
@@ -150,12 +150,14 @@
       const name = handleIndex > 0 ? lines[handleIndex - 1] : lines[0] || '';
       const buttonTexts = [...cell.querySelectorAll('button[role="button"], div[role="button"]')].map((button) => `${button.innerText || ''} ${button.getAttribute('aria-label') || ''}`);
       const canFollowBack = buttonTexts.some((buttonText) => buttonText.includes(zh.followBack) || /follow back/i.test(buttonText));
+      const isFollowing = Boolean(cell.querySelector('button[data-testid$="-unfollow"], div[data-testid$="-unfollow"]')) || buttonTexts.some((buttonText) => buttonText.includes(zh.following) || /\bfollowing\b/i.test(buttonText));
       const verified = text.includes(zh.verified) || /verified/i.test(text) || Boolean(cell.querySelector('[data-testid="icon-verified"], svg[aria-label*="Verified"], svg[aria-label*="\u8ba4\u8bc1"]'));
       accounts.push({
         handle,
         name: name.replace(new RegExp(zh.verified, 'g'), '').trim(),
         followsYou: text.includes(zh.followsYou) || /follows you/i.test(text),
         canFollowBack,
+        isFollowing,
         verified,
       });
     });
@@ -348,7 +350,7 @@
     let staleRounds = 0;
     let previousSize = scanMap.size;
     for (let round = 0; round < 240 && scanning; round += 1) {
-      mergeAccounts(parseVisibleAccounts());
+      mergeAccounts(parseVisibleAccounts().filter((account) => account.isFollowing));
       staleRounds = scanMap.size === previousSize ? staleRounds + 1 : 0;
       previousSize = scanMap.size;
       render();
@@ -357,7 +359,7 @@
       window.scrollBy(0, Math.floor(window.innerHeight * 0.9));
       await sleep(900);
     }
-    mergeAccounts(parseVisibleAccounts());
+    mergeAccounts(parseVisibleAccounts().filter((account) => account.isFollowing));
     scanning = false;
     render();
     log(`扫描完成：共 ${scanMap.size} 个关注账号，其中 ${getNonMutual().length} 个未互关。`);
