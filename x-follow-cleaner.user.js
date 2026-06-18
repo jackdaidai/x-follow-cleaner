@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         X Follow Cleaner Local
 // @namespace    local.x.follow.cleaner
-// @version      0.5.0
+// @version      0.5.1
 // @description  本地优先的 X 互关清理、白名单、批量取关和批量关注/回关工具。
 // @author       baor87492-star
 // @match        https://x.com/*
 // @match        https://twitter.com/*
-// @downloadURL  https://cdn.jsdelivr.net/gh/baor87492-star/x-follow-cleaner@main/x-follow-cleaner.user.js
-// @updateURL    https://cdn.jsdelivr.net/gh/baor87492-star/x-follow-cleaner@main/x-follow-cleaner.user.js
+// @downloadURL  https://cdn.jsdelivr.net/gh/jackdaidai/x-follow-cleaner@main/x-follow-cleaner.user.js
+// @updateURL    https://cdn.jsdelivr.net/gh/jackdaidai/x-follow-cleaner@main/x-follow-cleaner.user.js
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
