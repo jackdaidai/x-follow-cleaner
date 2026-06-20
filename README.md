@@ -1,10 +1,20 @@
-# X Follow Cleaner Local
+# X Follow Cleaner
+
+A local-first tool for cleaning up and managing your X / Twitter following and follower
+lists — find accounts that don't follow you back, whitelist, and batch unfollow / follow
+back. Everything runs in your browser: no backend, no login, no data leaves your machine.
 
 English | [简体中文](README.zh-CN.md)
 
-A local-first Tampermonkey userscript for cleaning up and managing your X / Twitter
-following and follower lists. It runs entirely in your browser — no backend, no
-account login, and no data leaves your machine.
+## Two ways to use it
+
+| Track | Folder | Best for |
+|---|---|---|
+| **Userscript** (Tampermonkey) | [`userscript/`](userscript/) | You already use Tampermonkey — one-click install + auto-update |
+| **Chrome extension** (standalone) | [`extension/`](extension/) | No Tampermonkey — load it straight into Chrome |
+
+Both share the same logic and UI (the extension's `content.js` is generated from the
+userscript). Pick one — running both at once just shows two panels.
 
 ## What it does
 
@@ -18,21 +28,14 @@ A panel appears on x.com / twitter.com with two workflows:
 - Select accounts, set a batch size and delay, then batch-unfollow.
 
 ### 2. Follow / follow back
-- Scans any account's **Followers** or **Verified followers** page — your own (follow back) or another user's (plain follow).
+- Scans any account's **Followers** or **Verified followers** page — your own
+  (follow back) or another user's (plain follow).
 - Lists accounts you can follow.
 - Select accounts and batch-follow with the same batch size / delay controls.
 
 ### Whitelist & export
 - Import / export your whitelist as JSON or one `@handle` per line.
 - Export the non-mutual list as JSON.
-
-## Install
-
-1. Install [Tampermonkey](https://www.tampermonkey.net/).
-2. Open the script:
-   https://raw.githubusercontent.com/jackdaidai/x-follow-cleaner/main/x-follow-cleaner.user.js
-3. Click **Install** in Tampermonkey.
-4. Open any X page — the panel appears at the top-right.
 
 ## Usage
 
@@ -46,13 +49,11 @@ A panel appears on x.com / twitter.com with two workflows:
 Tips:
 - **batch size** caps how many accounts each run processes; **delay (ms)** is the wait
   between actions — keep it generous (default 4500 ms) to avoid rate limits.
-- The result list takes up about half the panel and scrolls on its own; the panel
-  body scrolls to reach the controls above it.
+- The result list takes up about half the panel and scrolls on its own.
 
 ## Safety
 
-- Unfollow and follow only run after you select accounts and click
-  **Start unfollow** or **Start follow**.
+- Unfollow and follow only run after you select accounts and click **Start unfollow**
+  or **Start follow**.
 - Start with a batch size of **1** to confirm it behaves correctly on your account.
-- All state (whitelist, selections, progress) lives in your browser's `localStorage`
-  only.
+- All state (whitelist, selections, progress) lives in your browser's `localStorage` only.
