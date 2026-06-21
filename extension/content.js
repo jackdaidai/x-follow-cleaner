@@ -499,7 +499,7 @@
   }
 
   async function unfollowHandle(handle) {
-    const cell = findUserCell(normalizeHandle(handle));
+    const cell = await findUserCellWithScroll(normalizeHandle(handle), () => unfollowing);
     if (!cell) return false;
     cell.scrollIntoView({ block: 'center' });
     await sleep(600);
@@ -520,7 +520,7 @@
   }
 
   async function followBackHandle(handle) {
-    const cell = await findUserCellWithScroll(normalizeHandle(handle));
+    const cell = await findUserCellWithScroll(normalizeHandle(handle), () => followingBack);
     if (!cell) return false;
     cell.scrollIntoView({ block: 'center' });
     await sleep(600);
@@ -534,7 +534,7 @@
     return true;
   }
 
-  async function findUserCellWithScroll(handle) {
+  async function findUserCellWithScroll(handle, isActive = () => true) {
     let cell = findUserCell(handle);
     if (cell) return cell;
 
@@ -544,7 +544,7 @@
 
     let staleRounds = 0;
     let previousY = -1;
-    for (let round = 0; round < 180 && followingBack; round += 1) {
+    for (let round = 0; round < 180 && isActive(); round += 1) {
       cell = findUserCell(handle);
       if (cell) return cell;
 
