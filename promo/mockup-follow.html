@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{width:1440px;height:960px;background:#fff;color:#0f1419;overflow:hidden}
+  .app{display:grid;grid-template-columns:255px 1fr;height:960px}
+
+  .nav{border-right:1px solid #eff3f4;padding:8px 12px;display:flex;flex-direction:column;gap:4px}
+  .logo{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:30px;margin:6px 0 12px}
+  .nav-item{display:flex;align-items:center;gap:18px;padding:11px 12px;border-radius:9999px;font-size:20px;font-weight:500}
+  .nav-item .ico{font-size:24px;width:26px;text-align:center}
+  .nav-item.active{font-weight:800}
+  .post-btn{margin-top:14px;background:#1d9bf0;color:#fff;border:0;border-radius:9999px;padding:15px;font-size:17px;font-weight:800;cursor:pointer}
+  .me{margin-top:auto;display:flex;align-items:center;gap:11px;padding:11px;border-radius:9999px}
+  .ava{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#1d9bf0,#7856ff);flex:0 0 auto}
+  .me .nm{font-weight:800;font-size:15px}
+  .me .hd{color:#536471;font-size:14px}
+
+  .main{border-right:1px solid #eff3f4;min-width:0;overflow:hidden}
+  .top{position:sticky;top:0;backdrop-filter:blur(4px);background:rgba(255,255,255,.85);padding:6px 16px;border-bottom:1px solid #eff3f4}
+  .back{display:flex;align-items:center;gap:22px}
+  .back .arr{font-size:20px;color:#0f1419}
+  .back .nm{font-weight:800;font-size:20px;line-height:1.2}
+  .back .hd{color:#536471;font-size:13px}
+  .tabs{display:grid;grid-template-columns:1fr 1fr;margin-top:8px;font-size:15px;font-weight:600;color:#536471}
+  .tab{padding:14px 0;text-align:center;position:relative}
+  .tab.on{color:#0f1419;font-weight:800}
+  .tab.on::after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:84px;height:4px;border-radius:9999px;background:#1d9bf0}
+  .urow{display:flex;gap:12px;padding:12px 16px;align-items:flex-start}
+  .urow .ava{width:44px;height:44px}
+  .urow .meta{min-width:0;flex:1}
+  .urow .nm{font-weight:800;font-size:15px;display:flex;align-items:center;gap:5px}
+  .badge{color:#1d9bf0;font-size:14px}
+  .urow .hd{color:#536471;font-size:14px}
+  .urow .bio{font-size:14px;color:#0f1419;margin-top:2px}
+  .fbtn{border:1px solid #cfd9de;background:#0f1419;color:#fff;border-radius:9999px;padding:7px 16px;font-weight:800;font-size:14px;height:34px;flex:0 0 auto}
+
+  /* ====== REAL PANEL CSS (verbatim) ====== */
+  #xfc-panel{position:fixed;right:24px;top:70px;z-index:2147483647;width:380px;max-height:870px;color:#172033;background:#fff;border:1px solid #d8dee8;border-radius:8px;box-shadow:0 12px 36px rgba(15,23,42,.18);font:13px/1.45 Arial,sans-serif;overflow:hidden;display:flex;flex-direction:column}
+  #xfc-panel *{box-sizing:border-box}
+  .xfc-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#172033;color:#fff}.xfc-title{font-weight:700}
+  .xfc-head button,.xfc-actions button,.xfc-row button{border:0;border-radius:6px;padding:6px 9px;cursor:pointer;font-weight:700}.xfc-head button{background:#2a3448;color:#fff}
+  .xfc-body{flex:1 1 auto;min-height:0;overflow:hidden auto;padding:12px;display:grid;gap:10px}
+  .xfc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.xfc-stat{background:#f5f7fb;border:1px solid #e4e8f0;border-radius:6px;padding:7px}.xfc-stat strong{display:block;font-size:17px}
+  .xfc-stat.hot{background:#eef4ff;border-color:#bcd3fb}.xfc-stat.hot strong{color:#1264d8}
+  .xfc-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}.xfc-controls label{display:grid;gap:4px;font-weight:700}.xfc-controls input{min-width:0;border:1px solid #d8dee8;border-radius:6px;padding:7px}
+  .xfc-actions{display:flex;flex-wrap:wrap;gap:6px}.xfc-actions button{background:#1264d8;color:#fff}.xfc-actions button:disabled{background:#cbd5e1;color:#64748b;cursor:not-allowed}.xfc-actions button.secondary{background:#e9eef8;color:#18375f}.xfc-actions button.danger{background:#c9342f;color:#fff}
+  .xfc-list{border:1px solid #e4e8f0;border-radius:6px;min-height:360px;max-height:360px;overflow:auto}.xfc-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:8px;border-bottom:1px solid #edf1f7}.xfc-row:last-child{border-bottom:0}.xfc-name{overflow-wrap:anywhere}.xfc-name a{color:#1264d8;text-decoration:none;font-weight:700}.xfc-row button.keep{background:#e9eef8;color:#18375f}.xfc-row button.pick{background:#fff0ef;color:#c9342f;border:1px solid #f2b7b4}.xfc-row button.pick.active{background:#c9342f;color:#fff}.xfc-log{color:#667085;min-height:18px}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="nav">
+    <div class="logo">𝕏</div>
+    <div class="nav-item active"><span class="ico">🏠</span> 主页</div>
+    <div class="nav-item"><span class="ico">🔍</span> 探索</div>
+    <div class="nav-item"><span class="ico">🔔</span> 通知</div>
+    <div class="nav-item"><span class="ico">✉️</span> 私信</div>
+    <div class="nav-item"><span class="ico">📑</span> 书签</div>
+    <div class="nav-item"><span class="ico">👤</span> 个人资料</div>
+    <button class="post-btn">发帖</button>
+    <div class="me">
+      <div class="ava"></div>
+      <div><div class="nm">你的账号</div><div class="hd">@your_handle</div></div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="top">
+      <div class="back">
+        <span class="arr">←</span>
+        <div><div class="nm">某位创作者</div><div class="hd">@some_creator</div></div>
+      </div>
+      <div class="tabs">
+        <div class="tab on">认证关注者</div>
+        <div class="tab">关注者</div>
+      </div>
+    </div>
+
+    <div class="urow"><div class="ava"></div><div class="meta"><div class="nm">Indie Dev Anna <span class="badge">✔</span></div><div class="hd">@anna_builds</div><div class="bio">shipping a SaaS in public · Next.js + Postgres</div></div><button class="fbtn">关注</button></div>
+    <div class="urow"><div class="ava"></div><div class="meta"><div class="nm">ML Notes <span class="badge">✔</span></div><div class="hd">@ml_notes_daily</div><div class="bio">paper summaries, no hype · ex-research</div></div><button class="fbtn">关注</button></div>
+    <div class="urow"><div class="ava"></div><div class="meta"><div class="nm">Design Engineer <span class="badge">✔</span></div><div class="hd">@de_kev</div><div class="bio">CSS that doesn't fight you. occasional rants.</div></div><button class="fbtn">关注</button></div>
+    <div class="urow"><div class="ava"></div><div class="meta"><div class="nm">Rust Weekly <span class="badge">✔</span></div><div class="hd">@rust_weekly_zh</div><div class="bio">每周 Rust 生态精选 · 中文</div></div><button class="fbtn">关注</button></div>
+    <div class="urow"><div class="ava"></div><div class="meta"><div class="nm">Founder Diary <span class="badge">✔</span></div><div class="hd">@founder_diary</div><div class="bio">$0 → $10k MRR, the boring parts</div></div><button class="fbtn">关注</button></div>
+  </main>
+</div>
+
+<!-- ===== panel: follow / follow-back mode ===== -->
+<section id="xfc-panel">
+  <div class="xfc-head"><span class="xfc-title">X 互关与关注助手</span><button>收起</button></div>
+  <div class="xfc-body">
+    <div class="xfc-stats">
+      <div class="xfc-stat"><strong>842</strong>已扫关注</div>
+      <div class="xfc-stat"><strong>137</strong>未互关</div>
+      <div class="xfc-stat hot"><strong>156</strong>可关注</div>
+    </div>
+    <div class="xfc-controls">
+      <label>本次数量<input type="number" value="5"></label>
+      <label>间隔毫秒<input type="number" value="4500"></label>
+    </div>
+    <div class="xfc-actions">
+      <button class="secondary">查看未互关</button>
+      <button class="secondary">查看认证可关注</button>
+      <button class="secondary">查看全部可关注</button>
+    </div>
+    <div class="xfc-actions">
+      <button>扫描认证关注者</button>
+      <button class="secondary">扫描所有关注者</button>
+      <button class="secondary">打开认证关注者</button>
+      <button class="secondary">全选可关注</button>
+      <button>开始关注</button>
+      <button class="danger">停止</button>
+    </div>
+    <div class="xfc-list">
+      <div class="xfc-row"><div class="xfc-name">Indie Dev Anna<br><a>@anna_builds</a></div><button class="keep">跳过</button><button class="pick active">已选</button></div>
+      <div class="xfc-row"><div class="xfc-name">ML Notes<br><a>@ml_notes_daily</a></div><button class="keep">跳过</button><button class="pick active">已选</button></div>
+      <div class="xfc-row"><div class="xfc-name">Design Engineer<br><a>@de_kev</a></div><button class="keep">跳过</button><button class="pick active">已选</button></div>
+      <div class="xfc-row"><div class="xfc-name">Rust Weekly<br><a>@rust_weekly_zh</a></div><button class="keep">跳过</button><button class="pick active">已选</button></div>
+      <div class="xfc-row"><div class="xfc-name">Founder Diary<br><a>@founder_diary</a></div><button class="keep">跳过</button><button class="pick active">已选</button></div>
+      <div class="xfc-row"><div class="xfc-name">CSS Tricks 中文<br><a>@css_zh</a></div><button class="keep">跳过</button><button class="pick">关注</button></div>
+      <div class="xfc-row"><div class="xfc-name">Self-Hosting Club<br><a>@selfhost_club</a></div><button class="keep">跳过</button><button class="pick">关注</button></div>
+    </div>
+    <div class="xfc-log">已选 5 个 · 所有数据只保存在当前浏览器。</div>
+  </div>
+</section>
+</body>
+</html>

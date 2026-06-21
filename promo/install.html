@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:1200px;height:675px;background:#0f1726;color:#172033;
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+       display:flex;flex-direction:column;padding:40px 48px;gap:24px}
+  .hd{display:flex;align-items:center;gap:14px}
+  .hd .mark{width:46px;height:46px;border-radius:11px;background:#172033;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800}
+  .hd h1{color:#fff;font-size:30px;letter-spacing:.5px}
+  .hd .sub{color:#9fb0c9;font-size:15px;font-weight:600;margin-top:3px}
+  .pill{margin-left:auto;background:#1264d8;color:#fff;font-weight:800;font-size:15px;padding:9px 16px;border-radius:9999px}
+
+  .cards{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:22px;min-height:0}
+  .card{background:#fff;border-radius:16px;padding:24px 26px;display:flex;flex-direction:column;gap:14px;box-shadow:0 16px 40px rgba(0,0,0,.28)}
+  .card .tag{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:#1264d8;background:#eef4ff;border:1px solid #cfe0fb;padding:4px 10px;border-radius:9999px;align-self:flex-start}
+  .card h2{font-size:21px;color:#172033}
+  .card h2 small{display:block;color:#667085;font-size:13px;font-weight:600;margin-top:4px}
+  ol{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:2px}
+  li{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;color:#28344a}
+  .n{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:#172033;color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  code{background:#f1f4f9;border:1px solid #e2e8f2;border-radius:5px;padding:1px 6px;font-size:13px;font-family:"SF Mono",Consolas,monospace;color:#0b3a82}
+  .best{margin-top:auto;font-size:13px;color:#667085;font-weight:600;border-top:1px dashed #e2e8f2;padding-top:12px}
+
+  .foot{display:flex;align-items:center;gap:18px;color:#9fb0c9;font-size:15px;font-weight:600}
+  .foot .repo{color:#fff;font-weight:800;font-size:17px}
+  .chips{margin-left:auto;display:flex;gap:10px}
+  .chip{background:rgba(255,255,255,.08);color:#cdd9ec;border:1px solid rgba(255,255,255,.14);border-radius:9999px;padding:6px 13px;font-size:13px;font-weight:700}
+</style>
+</head>
+<body>
+  <div class="hd">
+    <div class="mark">𝕏</div>
+    <div>
+      <h1>X Follow Cleaner · 30 秒装好</h1>
+      <div class="sub">找出没回关你的账号 → 批量取关 / 批量关注 · 纯本地运行</div>
+    </div>
+    <div class="pill">开源免费</div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <span class="tag">🐵 油猴脚本 · Tampermonkey</span>
+      <h2>已经在用 Tampermonkey？<small>一键安装 + jsDelivr 自动更新</small></h2>
+      <ol>
+        <li><span class="n">1</span><div>安装 <b>Tampermonkey</b> 浏览器扩展</div></li>
+        <li><span class="n">2</span><div>打开仓库里的 <code>x-follow-cleaner.user.js</code></div></li>
+        <li><span class="n">3</span><div>在 Tampermonkey 弹窗里点 <b>安装</b></div></li>
+        <li><span class="n">4</span><div>打开任意 X 页面，右上角出现面板</div></li>
+      </ol>
+      <div class="best">适合：不想折腾、要自动更新的人</div>
+    </div>
+
+    <div class="card">
+      <span class="tag">🧩 Chrome 扩展 · 独立 MV3</span>
+      <h2>不想装 Tampermonkey？<small>直接加载进 Chrome，无额外权限</small></h2>
+      <ol>
+        <li><span class="n">1</span><div>下载 / 克隆本仓库</div></li>
+        <li><span class="n">2</span><div>打开 <code>chrome://extensions</code>，开启<b>开发者模式</b></div></li>
+        <li><span class="n">3</span><div>点<b>加载已解压的扩展程序</b>，选 <code>extension/</code> 目录</div></li>
+        <li><span class="n">4</span><div>打开任意 X 页面，右上角出现面板</div></li>
+      </ol>
+      <div class="best">适合：不装油猴、想要独立扩展的人</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span class="repo">github.com/jackdaidai/x-follow-cleaner</span>
+    <div class="chips">
+      <span class="chip">🔒 无需登录</span>
+      <span class="chip">🗄️ 无后端</span>
+      <span class="chip">📵 数据不出浏览器</span>
+    </div>
+  </div>
+</body>
+</html>

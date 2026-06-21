@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X 互关与关注助手",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "在 x.com 查看未互关账号、加白名单、按批次取关、回关或关注；所有数据仅保存在本地浏览器。",
   "icons": {
     "16": "icons/icon16.png",
