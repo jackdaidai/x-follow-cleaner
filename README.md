@@ -1,10 +1,10 @@
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 # X Follow Cleaner
 
 A local-first tool for cleaning up and managing your X / Twitter following and follower
 lists — find accounts that don't follow you back, whitelist, and batch unfollow / follow
 back. Everything runs in your browser: no backend, no login, no data leaves your machine.
-
-English | [简体中文](README.zh-CN.md)
 
 ## Two ways to use it
 
